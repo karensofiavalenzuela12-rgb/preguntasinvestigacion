@@ -1,1 +1,415 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Encuesta UrbanStyle — Fidelización</title>
+  <style>
+    :root{
+      --bg:#0b1220; --card:#0f1724; --muted:#9aa4b2; --accent:#7c3aed; --accent-2:#06b6d4; --success:#10b981; --danger:#ef4444; --glass: rgba(255,255,255,0.03);
+      --radius:12px; --gap:14px; --pad:16px; font-family: Inter, system-ui, -apple-system, Roboto, "Segoe UI", sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,var(--bg),#071126);color:#e6eef6;line-height:1.4}
+    .container{max-width:920px;margin:28px auto;padding:20px}
+    header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+    header h1{font-size:20px;margin:0}
+    .card{background:var(--card);border-radius:var(--radius);padding:var(--pad);box-shadow:0 6px 24px rgba(2,6,23,0.6)}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{padding:10px;border-bottom:1px dashed rgba(255,255,255,0.03);text-align:left}
+    th{color:var(--muted);font-weight:600}
+    .section-title{margin:12px 0 6px;color:var(--accent);font-weight:700}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    label{display:block;margin-bottom:6px;font-weight:600}
+    .control{background:var(--glass);border:1px solid rgba(255,255,255,0.03);padding:10px;border-radius:10px}
+    .row{margin-bottom:12px}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    button{background:linear-gradient(90deg,var(--accent),var(--accent-2));border:none;color:white;padding:10px 12px;border-radius:10px;cursor:pointer}
+    button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+    .small{font-size:13px;padding:8px 10px}
+    .muted{color:var(--muted);font-size:13px}
+    .radio-row{display:flex;gap:8px;flex-wrap:wrap}
+    .pill{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 10px;border-radius:999px;cursor:pointer}
+    input[type=range]{width:100%}
+    .notice{background:rgba(10,20,30,0.4);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.02);font-size:13px}
+    .aria-live{position:relative;margin-top:8px;min-height:20px}
+    .error{color:var(--danger);font-weight:600}
+    .success{color:var(--success);font-weight:700}
+    .preview{white-space:pre-wrap;background:#071428;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.02);font-size:13px}
+    @media (max-width:720px){.grid{grid-template-columns:1fr}}
+    /* focus visible */
+    :focus{outline:3px solid rgba(124,58,237,0.18);outline-offset:2px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="card" style="padding:10px;border-radius:10px">
+        <strong>Encuesta: Fidelización — UrbanStyle S.A.S.</strong>
+        <div class="muted">Tema: experiencia post-compra, calidad percibida, valor y fidelidad</div>
+      </div>
+    </header>
+
+    <!-- Tabla de operacionalización previa -->
+    <section class="card" aria-labelledby="op-title">
+      <h2 id="op-title" style="margin:0 0 8px">Tabla de operacionalización (resumen)</h2>
+      <p class="muted">Variable / Definición conceptual / Indicadores / Tipo de escala</p>
+      <div style="overflow:auto;margin-top:8px">
+        <table>
+          <thead>
+            <tr><th>Variable</th><th>Def. conceptual</th><th>Ítems</th><th>Tipo de escala</th><th>Fuente</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Satisfacción post-compra</td><td>Percepción del proceso de entrega y comunicación</td><td>Tiempo de entrega; claridad de notificaciones</td><td>Likert 1–5</td><td>Parasuraman et al.</td></tr>
+            <tr><td>Calidad percibida</td><td>Evaluación de materiales y concordancia con expectativas</td><td>Calidad materiales; coincidencia con descripción</td><td>Likert 1–5</td><td>Zeithaml (valor percibido)</td></tr>
+            <tr><td>Valor percibido</td><td>Relación precio–beneficio</td><td>Precios justos; comparativa con competidores</td><td>Likert 1–5</td><td>Zeithaml</td></tr>
+            <tr><td>Experiencia digital</td><td>Usabilidad y atención en canales online</td><td>Navegación; atención en chat/rrss</td><td>Likert 1–5</td><td>Investigación UX</td></tr>
+            <tr><td>Intención de recompra</td><td>Probabilidad de volver a comprar</td><td>Pregunta directa intención</td><td>Ordinal 1–5</td><td>Malhotra (invest. concluyente)</td></tr>
+            <tr><td>Lealtad (NPS)</td><td>Propensión a recomendar la marca</td><td>NPS 0–10</td><td>Razón/intervalo (0–10)</td><td>Reichheld</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Formulario -->
+    <form id="surveyForm" class="card" aria-labelledby="form-title" novalidate>
+      <h2 id="form-title">Cuestionario (duración estimada: 4–6 minutos)</h2>
+      <p class="muted">Gracias por ayudarnos a mejorar. Tus respuestas son anónimas y confidenciales.</p>
+
+      <div class="section-title">Sección A: Experiencia de compra</div>
+      <div class="row">
+        <label for="q1">1) ¿Qué tan satisfecho(a) estás con el <strong>tiempo de entrega</strong> de tu última compra?</label>
+        <div class="radio-row control" role="radiogroup" aria-labelledby="q1">
+          <input type="hidden" name="q1" id="q1" required aria-required="true">
+          <button type="button" class="pill" data-val="1" data-name="q1">1</button>
+          <button type="button" class="pill" data-val="2" data-name="q1">2</button>
+          <button type="button" class="pill" data-val="3" data-name="q1">3</button>
+          <button type="button" class="pill" data-val="4" data-name="q1">4</button>
+          <button type="button" class="pill" data-val="5" data-name="q1">5</button>
+        </div>
+        <div id="q1-msg" class="aria-live" aria-live="polite"></div>
+      </div>
+
+      <div class="row">
+        <label for="q2">2) ¿Qué tan clara fue la <strong>comunicación post-compra</strong> (notificaciones, seguimiento)?</label>
+        <div class="radio-row control" role="radiogroup" aria-labelledby="q2">
+          <input type="hidden" name="q2" id="q2" required aria-required="true">
+          <button type="button" class="pill" data-val="1" data-name="q2">1</button>
+          <button type="button" class="pill" data-val="2" data-name="q2">2</button>
+          <button type="button" class="pill" data-val="3" data-name="q2">3</button>
+          <button type="button" class="pill" data-val="4" data-name="q2">4</button>
+          <button type="button" class="pill" data-val="5" data-name="q2">5</button>
+        </div>
+        <div id="q2-msg" class="aria-live" aria-live="polite"></div>
+      </div>
+
+      <div class="section-title">Sección B: Producto</div>
+      <div class="row">
+        <label for="q3">3) El producto recibido <strong>cumplió con la calidad esperada</strong> (materiales, durabilidad).</label>
+        <div class="radio-row control" role="radiogroup" aria-labelledby="q3">
+          <input type="hidden" name="q3" id="q3" required aria-required="true">
+          <button type="button" class="pill" data-val="1" data-name="q3">1</button>
+          <button type="button" class="pill" data-val="2" data-name="q3">2</button>
+          <button type="button" class="pill" data-val="3" data-name="q3">3</button>
+          <button type="button" class="pill" data-val="4" data-name="q3">4</button>
+          <button type="button" class="pill" data-val="5" data-name="q3">5</button>
+        </div>
+        <div id="q3-msg" class="aria-live" aria-live="polite"></div>
+      </div>
+
+      <div class="row">
+        <label for="q4">4) El producto fue <strong>consistente con la descripción e imágenes</strong> en la tienda online.</label>
+        <div class="radio-row control" role="radiogroup" aria-labelledby="q4">
+          <input type="hidden" name="q4" id="q4" required aria-required="true">
+          <button type="button" class="pill" data-val="1" data-name="q4">1</button>
+          <button type="button" class="pill" data-val="2" data-name="q4">2</button>
+          <button type="button" class="pill" data-val="3" data-name="q4">3</button>
+          <button type="button" class="pill" data-val="4" data-name="q4">4</button>
+          <button type="button" class="pill" data-val="5" data-name="q4">5</button>
+        </div>
+        <div id="q4-msg" class="aria-live" aria-live="polite"></div>
+      </div>
+
+      <div class="section-title">Sección C: Valor percibido</div>
+      <div class="row">
+        <label for="q5">5) Considero que los <strong>precios</strong> de UrbanStyle son justos en relación con la calidad recibida.</label>
+        <div class="radio-row control" role="radiogroup" aria-labelledby="q5">
+          <input type="hidden" name="q5" id="q5" required aria-required="true">
+          <button type="button" class="pill" data-val="1" data-name="q5">1</button>
+          <button type="button" class="pill" data-val="2" data-name="q5">2</button>
+          <button type="button" class="pill" data-val="3" data-name="q5">3</button>
+          <button type="button" class="pill" data-val="4" data-name="q5">4</button>
+          <button type="button" class="pill" data-val="5" data-name="q5">5</button>
+        </div>
+        <div id="q5-msg" class="aria-live" aria-live="polite"></div>
+      </div>
+
+      <div class="row">
+        <label for="q6">6) En comparación con Dafiti, Linio o Mercado Libre, UrbanStyle ofrece una <strong>buena relación calidad-precio</strong>.</label>
+        <div class="radio-row control" role="radiogroup" aria-labelledby="q6">
+          <input type="hidden" name="q6" id="q6" required aria-required="true">
+          <button type="button" class="pill" data-val="1" data-name="q6">1</button>
+          <button type="button" class="pill" data-val="2" data-name="q6">2</button>
+          <button type="button" class="pill" data-val="3" data-name="q6">3</button>
+          <button type="button" class="pill" data-val="4" data-name="q6">4</button>
+          <button type="button" class="pill" data-val="5" data-name="q6">5</button>
+        </div>
+        <div id="q6-msg" class="aria-live" aria-live="polite"></div>
+      </div>
+
+      <div class="section-title">Sección D: Experiencia digital</div>
+      <div class="row">
+        <label for="q7">7) ¿Qué tan fácil te resultó <strong>navegar y comprar</strong> en el sitio web de UrbanStyle?</label>
+        <div class="radio-row control" role="radiogroup" aria-labelledby="q7">
+          <input type="hidden" name="q7" id="q7" required aria-required="true">
+          <button type="button" class="pill" data-val="1" data-name="q7">1</button>
+          <button type="button" class="pill" data-val="2" data-name="q7">2</button>
+          <button type="button" class="pill" data-val="3" data-name="q7">3</button>
+          <button type="button" class="pill" data-val="4" data-name="q7">4</button>
+          <button type="button" class="pill" data-val="5" data-name="q7">5</button>
+        </div>
+        <div id="q7-msg" class="aria-live" aria-live="polite"></div>
+      </div>
+
+      <div class="row">
+        <label for="q8">8) ¿Qué tan satisfecho(a) estás con la <strong>atención en canales digitales</strong> (chat, redes)?</label>
+        <div class="radio-row control" role="radiogroup" aria-labelledby="q8">
+          <input type="hidden" name="q8" id="q8" required aria-required="true">
+          <button type="button" class="pill" data-val="1" data-name="q8">1</button>
+          <button type="button" class="pill" data-val="2" data-name="q8">2</button>
+          <button type="button" class="pill" data-val="3" data-name="q8">3</button>
+          <button type="button" class="pill" data-val="4" data-name="q8">4</button>
+          <button type="button" class="pill" data-val="5" data-name="q8">5</button>
+        </div>
+        <div id="q8-msg" class="aria-live" aria-live="polite"></div>
+      </div>
+
+      <div class="section-title">Sección E: Fidelización</div>
+      <div class="row">
+        <label for="q9">9) ¿Qué probabilidad hay de que <strong>vuelvas a comprar</strong> en UrbanStyle en los próximos 6 meses?</label>
+        <select id="q9" name="q9" class="control" required aria-required="true">
+          <option value="">Seleccione</option>
+          <option value="1">Muy improbable</option>
+          <option value="2">Poco probable</option>
+          <option value="3">Neutral</option>
+          <option value="4">Probable</option>
+          <option value="5">Muy probable</option>
+        </select>
+        <div id="q9-msg" class="aria-live" aria-live="polite"></div>
+      </div>
+
+      <div class="row">
+        <label for="q10">10) En una escala del 0 al 10, ¿qué probabilidad hay de que <strong>recomiendes UrbanStyle</strong> a un amigo?</label>
+        <input type="range" id="q10" name="q10" min="0" max="10" value="5" oninput="document.getElementById('q10-val').textContent = this.value" class="control">
+        <div class="muted">Valor: <span id="q10-val">5</span></div>
+        <div id="q10-msg" class="aria-live" aria-live="polite"></div>
+      </div>
+
+      <div class="section-title">Sección F: Demografía</div>
+      <div class="grid">
+        <div class="row">
+          <label for="q11">11) Rango de edad</label>
+          <select id="q11" name="q11" class="control" required aria-required="true">
+            <option value="">Seleccione</option>
+            <option value="18-24">18–24</option>
+            <option value="25-34">25–34</option>
+            <option value="35-44">35–44</option>
+            <option value="45+">45+</option>
+          </select>
+        </div>
+        <div class="row">
+          <label for="q12">12) ¿Con qué frecuencia compras moda en línea?</label>
+          <select id="q12" name="q12" class="control" required aria-required="true">
+            <option value="">Seleccione</option>
+            <option value="never">Nunca</option>
+            <option value="6m">1 vez cada 6 meses</option>
+            <option value="qtr">1 vez al trimestre</option>
+            <option value="monthly">1 vez al mes</option>
+            <option value=">monthly">Más de 1 vez al mes</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:8px">
+        <label><input type="checkbox" id="consent" name="consent"> Acepto que mis respuestas sean utilizadas de forma anónima para fines de investigación (consentimiento informado).</label>
+      </div>
+
+      <div class="actions">
+        <button type="button" id="saveDraft" class="small ghost">Guardar borrador (local)</button>
+        <button type="button" id="loadDraft" class="small ghost">Cargar borrador</button>
+        <button type="button" id="clearDraft" class="small ghost">Borrar borrador</button>
+        <button type="button" id="preview" class="small">Vista previa</button>
+        <button type="button" id="exportJSON" class="small">Exportar JSON</button>
+        <button type="button" id="exportCSV" class="small">Exportar CSV</button>
+        <label class="small ghost" style="display:inline-flex;align-items:center;padding:8px 10px;border-radius:8px;cursor:pointer"><input type="file" id="importFile" accept="application/json" style="display:none"> Importar JSON</label>
+        <button type="submit" id="submitBtn" class="small">Enviar encuesta</button>
+      </div>
+
+      <div id="msg" class="aria-live" aria-live="polite" style="margin-top:10px"></div>
+
+    </form>
+
+    <section style="margin-top:16px" class="card">
+      <h3 style="margin:0 0 8px">Ayuda rápida</h3>
+      <div class="muted">Controles: selecciona la puntuación deseada para cada pregunta Likert (1–5). Usa "Vista previa" para revisar tus respuestas antes de enviar. Puedes guardar un borrador en tu navegador o exportar las respuestas a JSON/CSV.</div>
+    </section>
+
+    <section id="previewModal" class="card" style="display:none;margin-top:12px">
+      <h3>Resumen previo</h3>
+      <div id="previewContent" class="preview"></div>
+      <div style="margin-top:8px" class="actions"><button id="closePreview" class="small ghost">Cerrar</button></div>
+    </section>
+
+  </div>
+
+  <script>
+    // Accessibility live region for errors
+    const live = document.getElementById('msg');
+
+    // Initialize pill buttons
+    document.querySelectorAll('.pill').forEach(btn => {
+      btn.addEventListener('click', ()=>{
+        const name = btn.dataset.name; const val = btn.dataset.val;
+        // set hidden input
+        document.getElementById(name).value = val;
+        // visual
+        document.querySelectorAll('[data-name="'+name+'"].pill').forEach(p=>p.style.borderColor='rgba(255,255,255,0.06)');
+        btn.style.borderColor = 'rgba(124,58,237,0.85)';
+        document.getElementById(name+'-msg').textContent = '';
+      });
+    });
+
+    function getFormData(){
+      const form = document.getElementById('surveyForm');
+      const data = {};
+      new FormData(form).forEach((v,k)=>{data[k]=v});
+      // include range explicit
+      data.q10 = document.getElementById('q10').value;
+      return data;
+    }
+
+    // Validation helper
+    function validate(){
+      const reqs = ['q1','q2','q3','q4','q5','q6','q7','q8','q9','q10','q11','q12'];
+      let ok=true; let first=null;
+      reqs.forEach(id=>{
+        const el = document.getElementById(id);
+        if(!el) return;
+        const val = el.value;
+        if(val===null || val===''){
+          ok=false; if(!first) first=id;
+          document.getElementById(id+'-msg').innerHTML = '<span class="error">Respuesta requerida</span>';
+        } else {
+          document.getElementById(id+'-msg').textContent='';
+        }
+      });
+      if(!ok){
+        live.innerHTML = '<span class="error">Hay preguntas sin responder. Por favor revise el formulario.</span>';
+        if(first){ document.getElementById(first).focus(); }
+      } else {
+        live.innerHTML = '<span class="success">Formulario válido — listo para enviar.</span>';
+      }
+      return ok;
+    }
+
+    // Save / Load draft (localStorage)
+    const DKEY = 'urbanstyle_survey_draft_v1';
+    document.getElementById('saveDraft').addEventListener('click', ()=>{
+      const data = getFormData();
+      localStorage.setItem(DKEY, JSON.stringify(data));
+      live.innerHTML = '<span class="success">Borrador guardado en el navegador.</span>';
+    });
+    document.getElementById('loadDraft').addEventListener('click', ()=>{
+      const raw = localStorage.getItem(DKEY);
+      if(!raw){ live.innerHTML = '<span class="error">No hay borrador guardado.</span>'; return; }
+      const obj = JSON.parse(raw);
+      Object.keys(obj).forEach(k=>{
+        const el = document.getElementById(k);
+        if(el){ el.value = obj[k]; }
+        // update pills border
+        document.querySelectorAll('[data-name="'+k+'"].pill').forEach(p=>p.style.borderColor='rgba(255,255,255,0.06)');
+        const sel = document.querySelector('[data-name="'+k+'"].pill[data-val="'+obj[k]+'"]');
+        if(sel) sel.style.borderColor='rgba(124,58,237,0.85)';
+      });
+      document.getElementById('q10-val').textContent = document.getElementById('q10').value;
+      live.innerHTML = '<span class="success">Borrador cargado.</span>';
+    });
+    document.getElementById('clearDraft').addEventListener('click', ()=>{
+      localStorage.removeItem(DKEY); live.innerHTML = '<span class="success">Borrador eliminado.</span>';
+    });
+
+    // Preview
+    document.getElementById('preview').addEventListener('click', ()=>{
+      const data = getFormData();
+      const pretty = JSON.stringify(data,null,2);
+      document.getElementById('previewContent').textContent = pretty;
+      document.getElementById('previewModal').style.display='block';
+      document.getElementById('closePreview').focus();
+    });
+    document.getElementById('closePreview').addEventListener('click', ()=>{
+      document.getElementById('previewModal').style.display='none';
+    });
+
+    // Export JSON
+    function download(filename, text){
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([text],{type:'application/json'}));
+      a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+    }
+    document.getElementById('exportJSON').addEventListener('click', ()=>{
+      const data = getFormData(); download('urbanstyle_survey.json', JSON.stringify(data,null,2));
+    });
+
+    // Export CSV (simple)
+    document.getElementById('exportCSV').addEventListener('click', ()=>{
+      const data = getFormData();
+      const keys = Object.keys(data);
+      const values = keys.map(k=> '"'+String(data[k]).replace(/"/g,'""')+'"');
+      const csv = keys.join(',') + '\n' + values.join(',');
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+      a.download = 'urbanstyle_survey.csv'; document.body.appendChild(a); a.click(); a.remove();
+    });
+
+    // Import JSON
+    document.getElementById('importFile').addEventListener('change', (e)=>{
+      const f = e.target.files[0]; if(!f) return;
+      const r = new FileReader(); r.onload = ()=>{
+        try{
+          const obj = JSON.parse(r.result);
+          Object.keys(obj).forEach(k=>{ const el = document.getElementById(k); if(el) el.value = obj[k];
+            document.querySelectorAll('[data-name="'+k+'"].pill').forEach(p=>p.style.borderColor='rgba(255,255,255,0.06)');
+            const sel = document.querySelector('[data-name="'+k+'"].pill[data-val="'+obj[k]+'"]'); if(sel) sel.style.borderColor='rgba(124,58,237,0.85)';
+          });
+          document.getElementById('q10-val').textContent = document.getElementById('q10').value;
+          live.innerHTML = '<span class="success">Datos importados.</span>';
+        }catch(err){ live.innerHTML = '<span class="error">Archivo inválido.</span>' }
+      }; r.readAsText(f);
+    });
+
+    // Form submit
+    document.getElementById('surveyForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      if(!validate()) return;
+      const data = getFormData();
+      // Here you would POST to server. For demo, we save to localStorage submissions
+      const subs = JSON.parse(localStorage.getItem('urbanstyle_subs_v1') || '[]');
+      subs.push(Object.assign({ts:new Date().toISOString()}, data));
+      localStorage.setItem('urbanstyle_subs_v1', JSON.stringify(subs));
+      localStorage.removeItem(DKEY);
+      live.innerHTML = '<span class="success">Gracias — tus respuestas fueron registradas.</span>';
+      // reset form
+      //document.getElementById('surveyForm').reset();
+    });
+
+    // Basic on-change validation to clear messages
+    document.querySelectorAll('select,input').forEach(el=>{
+      el.addEventListener('change', ()=>{ validate(); });
+    });
+
+    // initial validation state
+    validate();
+  </script>
+</body>
+</html>
 
